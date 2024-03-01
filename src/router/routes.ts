@@ -7,21 +7,51 @@ const routes: RouteRecordRaw[] = [
     children: [{ path: "", component: () => import("pages/IndexPage.vue") }],
   },
   {
-    path: "/empty",
+    path: "/profile",
     component: () => import("layouts/MainLayout.vue"),
-    children: [{ path: "", component: () => import("pages/EmptyPage.vue") }],
+    children: [{ path: "", component: () => import("pages/ProfilePage.vue") }],
   },
   {
-    path: "/basic",
+    path: "/login",
     component: () => import("layouts/MainLayout.vue"),
-    children: [{ path: "", component: () => import("pages/BasicPage.vue") }],
+    children: [{ path: "", component: () => import("pages/LoginPage.vue") }],
   },
   {
-    path: "/table",
+    path: "/register",
     component: () => import("layouts/MainLayout.vue"),
-    children: [{ path: "", component: () => import("pages/TablePage.vue") }],
+    children: [{ path: "", component: () => import("pages/RegisterPage.vue") }],
   },
-  
+  {
+    path: "/myAds",
+    component: () => import("layouts/MainLayout.vue"),
+    children: [{ path: "", component: () => import("pages/MyAdsPage.vue") }],
+  },
+  {
+    path: "/ads",
+    component: () => import("layouts/MainLayout.vue"),
+    children: [{ path: "", component: () => import("pages/AdsPage.vue") }],
+  },
+  {
+    path: "/adDetails",
+    component: () => import("layouts/MainLayout.vue"),
+    children: [{ path: "", component: () => import("pages/AdDetailsPage.vue") }],
+  },
+  {
+    path: "/search",
+    component: () => import("layouts/MainLayout.vue"),
+    children: [{ path: "", component: () => import("pages/SearchPage.vue") }],
+  },
+  {
+    path: "/contacts",
+    component: () => import("layouts/MainLayout.vue"),
+    children: [{ path: "", component: () => import("pages/ContactsPage.vue") }],
+  },
+  {
+    path: "/messageDetails",
+    component: () => import("layouts/MainLayout.vue"),
+    children: [{ path: "", component: () => import("pages/MessageDetailsPage.vue") }],
+  },
+
   // Always leave this as last one,
   // but you can also remove it
   {
