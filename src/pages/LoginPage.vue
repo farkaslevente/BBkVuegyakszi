@@ -79,7 +79,7 @@ const handleLogin = async () => {
 
     console.log("Login successful", response.data);
     login.successful = true;
-    router.replace({ path: "/" });
+    router.replace({ path: "/profile" });
   } catch (error) {
     console.error("Login failed", error.response.data);
   }
