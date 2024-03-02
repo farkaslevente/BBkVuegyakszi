@@ -5,6 +5,7 @@ import { ref } from "vue";
 // let { locale } = useI18n();
 
 let showMenuBar = ref(true);
+let showProfileItems = ref(false);
 </script>
 
 <template>
@@ -21,10 +22,15 @@ let showMenuBar = ref(true);
         </q-toolbar-title>
 
         <q-tabs v-if="$q.screen.gt.sm" inline-label shrink>
-          <q-route-tab icon="mdi-account" label="Profil" no-caps to="/profile" />
+          <q-route-tab v-if="showProfileItems" icon="mdi-account" label="Profil" no-caps to="/profile" />
           <q-route-tab icon="mdi-login" label="Bejelentkezés" no-caps to="/login" />
-          <q-route-tab icon="mdi-list-box-outline" label="Hirdetéseim" no-caps to="/myAds" />
-          <q-route-tab icon="mdi-message-badge-outline" label="Üzenetek" no-caps to="/contacts" />
+          <q-route-tab v-if="showProfileItems" icon="mdi-list-box-outline" label="Hirdetéseim" no-caps to="/myAds" />
+          <q-route-tab
+            v-if="showProfileItems"
+            icon="mdi-message-badge-outline"
+            label="Üzenetek"
+            no-capsto="/contacts"
+          />
           <q-route-tab
             href="https://github.com/farkaslevente/14AA-D-Others"
             icon="mdi-github"
