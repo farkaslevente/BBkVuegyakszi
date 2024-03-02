@@ -56,25 +56,30 @@
 // });
 import axios from "axios";
 import { reactive } from "vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 interface ILogin {
   email: string;
   password: string;
+  successful: boolean;
 }
 const login = reactive<ILogin>({
   email: "",
   password: "",
+  successful: false,
 });
 const handleLogin = async () => {
   try {
-
-
     const response = await axios.post("http://192.168.0.165:9090/login", {
       email: login.email,
       password: login.password,
     });
 
     console.log("Login successful", response.data);
+    login.successful = true;
+    router.replace({ path: "/" });
   } catch (error) {
     console.error("Login failed", error.response.data);
   }
