@@ -32,7 +32,7 @@ let showProfileItems = ref(false);
             no-capsto="/contacts"
           />
           <q-route-tab
-            href="https://github.com/farkaslevente/14AA-D-Others"
+            href="https://github.com/farkaslevente/BBkVueBackupFrontend"
             icon="mdi-github"
             label="Github"
             no-caps
