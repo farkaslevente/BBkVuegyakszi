@@ -1,24 +1,15 @@
 import { defineStore } from "pinia";
 import { Notify, Loading } from "quasar";
 import { api } from "src/boot/axios";
+import ILocation from "../interfaces/location.interface";
+import ILogin from "../interfaces/login.interface";
+import IRegister from "../interfaces/register.interface";
+import IProfile from "../interfaces/profile.interface";
+
 // import router from "src/router";
 
 // === INTERFACES ===
 // Convert JSON document to TS Interface quickly: https://transform.tools/json-to-typescript
-
-export interface IApp {
-  showEditDialog: boolean;
-  showNewDialog: boolean;
-  filter: string;
-  selectedMany: Array<IMany>;
-  selectedOne: Array<IOne>;
-  yesNoComp: {
-    kérdés: string;
-    pozitívGomb: string;
-    negatívGomb: string;
-    válasz?: boolean;
-  }
-}
 
 export interface IOne {
   id?: number;
@@ -58,7 +49,26 @@ interface IState {
     documentOld: IOther;
     documents: IOther[];
   };
-  app: IApp;
+  login: {
+    document: ILogin;
+    documentOld: ILogin;
+    documents: ILogin[];
+  };
+  register: {
+    document: IRegister;
+    documentOld: IRegister;
+    documents: IRegister[];
+  };
+  profile: {
+    document: IProfile;
+    documentOld: IProfile;
+    documents: IProfile[];
+  };
+  location: {
+    document: ILocation;
+    documentOld: ILocation;
+    documents: ILocation[];
+  };
 }
 
 export const useStore = defineStore({
@@ -79,17 +89,25 @@ export const useStore = defineStore({
       documentOld: {},
       documents: [],
     },
-    app: {
-      showEditDialog: false,
-      showNewDialog: false,
-      filter: "",
-      selectedMany: [],
-      selectedOne: [],
-      yesNoComp:{
-        kérdés: "Igen vagy nem?",
-        pozitívGomb: "Igen",
-        negatívGomb: "Nem"
-      }
+    login: {
+      document: {},
+      documentOld: {},
+      documents: [],
+    },
+    register: {
+      document: {},
+      documentOld: {},
+      documents: [],
+    },
+    profile: {
+      document: {},
+      documentOld: {},
+      documents: [],
+    },
+    location: {
+      document: {},
+      documentOld: {},
+      documents: [],
     },
   }),
   getters: {},
@@ -99,6 +117,21 @@ export const useStore = defineStore({
       this.one.documents = [];
       api
         .get("api/categories")
+        .then((res) => {
+          Loading.hide();
+          if (res?.data) {
+            this.one.documents = res.data;
+          }
+        })
+        .catch((error) => {
+          ShowErrorWithNotify(error);
+        });
+    },
+    async location_GetAll(): Promise<void> {
+      Loading.show();
+      this.one.documents = [];
+      api
+        .get("")
         .then((res) => {
           Loading.hide();
           if (res?.data) {

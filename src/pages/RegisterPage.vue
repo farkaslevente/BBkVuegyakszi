@@ -30,9 +30,12 @@
             <q-input v-model="register.name" label="Felhasználónév"> </q-input>
             <q-input v-model="register.email" label="E-mail cím"> </q-input>
             <q-input v-model="register.password" label="Jelszó" type="password"> </q-input>
+            <q-select v-model="counties" filled label="Vármegye" :options="countyOptions" />
+            <q-select v-model="model" filled label="Vármegye" :options="settlementsOptions" />
             <q-input v-model="register.location" label="Hely, ahol főként keresne"> </q-input>
             <div>
               <q-btn class="full-width" color="primary" label="Regisztrálok" rounded @click="handleRegister()"></q-btn>
+              <q-btn class="full-width" color="primary" label="Regisztrálok" rounded @click="handleGetTest()"></q-btn>
               <div class="text-center q-mt-sm q-gutter-lg column">
                 <router-link class="text-blue" to="/login">Már rendelkezik fiókkal?</router-link>
                 <router-link class="text-blue" to="/">Elfelejtette jelszavát?</router-link>
@@ -59,20 +62,23 @@
 import axios from "axios";
 import { reactive } from "vue";
 import { useRouter } from "vue-router";
+import IRegister from "../interfaces/register.interface.ts";
+import ILocation from "../interfaces/location.interface.ts";
 
 const router = useRouter();
 
-interface IRegister {
-  name: string;
-  email: string;
-  password: string;
-  location: string;
-}
 const register = reactive<IRegister>({
   name: "",
   email: "",
   password: "",
   location: "",
+  county: "",
+});
+
+const locationTest = reactive<ILocation>({
+  id,
+  name: "",
+  county: "",
 });
 const handleRegister = async () => {
   try {
@@ -90,6 +96,18 @@ const handleRegister = async () => {
     router.replace({ path: "/login" });
   }
 };
+const handleGetTest = async () => {
+  try {
+    const response = await axios.get("http://192.168.0.165:9090/locations", {
+      name: locationTest.name,
+      county: locationTest.county,
+    });
+
+    console.log(response.data);
+  } catch (error) {
+    console.error("Registration failed", error.response.data);
+  }
+};
 </script>
 <style lang="scss" scoped>
 .backgroundImage {
@@ -104,22 +122,5 @@ const handleRegister = async () => {
 }
 h2 {
   font-size: 3vw;
-}
-
-.bg-image {
-  /* The image used */
-  background-image: url("Jedlik_big.png");
-
-  /* Add the blur effect */
-  filter: blur(8px);
-  -webkit-filter: blur(8px);
-
-  /* Full height */
-  height: 100%;
-
-  /* Center and scale the image nicely */
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
 }
 </style>

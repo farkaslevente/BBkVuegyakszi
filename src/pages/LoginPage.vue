@@ -57,14 +57,10 @@
 import axios from "axios";
 import { reactive } from "vue";
 import { useRouter } from "vue-router";
+import ILogin from "../interfaces/login.interface.ts";
 
 const router = useRouter();
 
-interface ILogin {
-  email: string;
-  password: string;
-  successful: boolean;
-}
 const login = reactive<ILogin>({
   email: "",
   password: "",
