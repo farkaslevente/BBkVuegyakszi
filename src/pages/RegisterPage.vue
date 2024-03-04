@@ -30,12 +30,18 @@
             <q-input v-model="register.name" label="Felhasználónév"> </q-input>
             <q-input v-model="register.email" label="E-mail cím"> </q-input>
             <q-input v-model="register.password" label="Jelszó" type="password"> </q-input>
-            <q-select v-model="counties" filled label="Vármegye" :options="countyOptions" />
-            <q-select v-model="model" filled label="Vármegye" :options="settlementsOptions" />
-            <q-input v-model="register.location" label="Hely, ahol főként keresne"> </q-input>
+            <!-- <q-select v-model="counties" filled label="Vármegye" :options="countyOptions" />
+            <q-select v-model="model" filled label="Vármegye" :options="settlementsOptions" /> -->
+            <!-- <q-input v-model="register.location" label="Telefonszám"> </q-input>
+            <div> -->
+            <q-input v-model="register.confirm_password" label="Jelszó megerősítése" type="password"> </q-input>
+
             <div>
               <q-btn class="full-width" color="primary" label="Regisztrálok" rounded @click="handleRegister()"></q-btn>
-              <q-btn class="full-width" color="primary" label="Regisztrálok" rounded @click="handleGetTest()"></q-btn>
+              <!-- <q-btn class="full-width" color="primary" label="Regisztrálok" rounded @click="handleGetTest()"></q-btn> -->
+              <div class="text-red flex justify-center" style="margin-top: 10px">
+                {{ errorDesc }}
+              </div>
               <div class="text-center q-mt-sm q-gutter-lg column">
                 <router-link class="text-blue" to="/login">Már rendelkezik fiókkal?</router-link>
                 <router-link class="text-blue" to="/">Elfelejtette jelszavát?</router-link>
@@ -60,60 +66,79 @@
 //   }
 // });
 import axios from "axios";
-import { reactive } from "vue";
+import { reactive, ref } from "vue";
 import { useRouter } from "vue-router";
-import IRegister from "../interfaces/register.interface.ts";
-import ILocation from "../interfaces/location.interface.ts";
-
+import IRegister from "../interfaces/register.interface";
+// import { ref } from "vue";
+// import ILocation from "../interfaces/location.interface.ts";
+const errorDesc = ref();
 const router = useRouter();
 
 const register = reactive<IRegister>({
   name: "",
   email: "",
   password: "",
+  confirm_password: "",
   location: "",
   county: "",
 });
 
-const locationTest = reactive<ILocation>({
-  id,
-  name: "",
-  county: "",
-});
+// const locationTest = reactive<ILocation>({
+//   id,
+//   name: "",
+//   county: "",
+// });
 const handleRegister = async () => {
   try {
-    const response = await axios.post("http://192.168.0.165:9090/register", {
-      name: register.name,
-      email: register.email,
-      location: register.location,
-      password: register.password,
-    });
+    if (register.email.includes("@")) {
+      const response = await axios.post("http://10.0.58.14:9090/register", {
+        name: register.name,
+        email: register.email,
+        location: register.location,
+        password: register.password,
+      });
+      console.log("Registered successful", response.data);
+      router.replace({ path: "/login" });
+    } else {
+      errorDesc.value = "Nem megfelelő email cím!";
+    }
 
-    console.log("Registered successful", response.data);
-    router.replace({ path: "/login" });
+    if (register.password == register.confirm_password) {
+      const response = await axios.post("http://10.0.58.14:9090/register", {
+        name: register.name,
+        email: register.email,
+        location: register.location,
+        password: register.password,
+      });
+      console.log("Registered successful", response.data);
+      router.replace({ path: "/login" });
+    } else {
+      errorDesc.value = "Nem egyeznek a jelszavai!";
+    }
   } catch (error) {
     console.error("Registration failed", error.response.data);
-    router.replace({ path: "/login" });
-  }
-};
-const handleGetTest = async () => {
-  try {
-    const response = await axios.get("http://192.168.0.165:9090/locations", {
-      name: locationTest.name,
-      county: locationTest.county,
-    });
 
-    console.log(response.data);
-  } catch (error) {
-    console.error("Registration failed", error.response.data);
+    // router.replace({ path: "/login" });
   }
 };
+// const handleGetTest = async () => {
+//   try {
+//     const response = await axios.get("http://192.168.0.165:9090/locations", {
+//       name: locationTest.name,
+//       county: locationTest.county,
+//     });
+
+//     console.log(response.data);
+//   } catch (error) {
+//     console.error("Registration failed", error.response.data);
+//   }
+// };
 </script>
 <style lang="scss" scoped>
 .backgroundImage {
   position: fixed;
-  height: auto;
-  width: auto;
+  height: 100%;
+  width: 100%;
   left: 100;
   bottom: 100;
   z-index: -1;

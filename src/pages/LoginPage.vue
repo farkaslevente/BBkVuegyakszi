@@ -28,9 +28,12 @@
         <q-card-section>
           <q-form class="q-gutter-md">
             <q-input v-model="login.email" label="E-mail cím"> </q-input>
-            <q-input v-model="login.password" label="Jelszó" type="password"> </q-input>
+            <q-input v-model="login.password" label="Jelszó" type="password"> </q-input>          
             <div>
-              <q-btn class="full-width" color="primary" label="Login" rounded @click="handleLogin()"></q-btn>
+              <q-btn class="full-width" color="primary" label="Bejelentkezés" rounded @click="handleLogin()"></q-btn>
+              <div class="text-red flex justify-center" style="margin-top: 10px;">
+                {{ errorDesc }}
+              </div>
               <div class="text-center q-mt-sm q-gutter-lg column">
                 <router-link class="text-blue" to="/register">Nincs még fiókja? Regisztráljon!</router-link>
                 <router-link class="text-blue" to="/">Elfelejtette jelszavát?</router-link>
@@ -55,9 +58,12 @@
 //   }
 // });
 import axios from "axios";
-import { reactive } from "vue";
+import { reactive, ref } from "vue";
 import { useRouter } from "vue-router";
-import ILogin from "../interfaces/login.interface.ts";
+import ILogin from "../interfaces/login.interface";
+//const IPHome: "192.168.0.165";
+const errorDesc = ref();
+//let IPB8: "10.0.58.14";
 
 const router = useRouter();
 
@@ -68,7 +74,7 @@ const login = reactive<ILogin>({
 });
 const handleLogin = async () => {
   try {
-    const response = await axios.post("http://192.168.0.165:9090/login", {
+    const response = await axios.post("http://10.0.58.14:9090/login", {
       email: login.email,
       password: login.password,
     });
@@ -78,14 +84,15 @@ const handleLogin = async () => {
     router.replace({ path: "/profile" });
   } catch (error) {
     console.error("Login failed", error.response.data);
+    errorDesc.value = error.response.data.error;
   }
 };
 </script>
 <style lang="scss" scoped>
 .backgroundImage {
   position: fixed;
-  height: auto;
-  width: auto;
+  height: 100%;
+  width: 100%;
   left: 100;
   bottom: 100;
   z-index: -1;
@@ -94,22 +101,5 @@ const handleLogin = async () => {
 }
 h2 {
   font-size: 3vw;
-}
-
-.bg-image {
-  /* The image used */
-  background-image: url("Jedlik_big.png");
-
-  /* Add the blur effect */
-  filter: blur(8px);
-  -webkit-filter: blur(8px);
-
-  /* Full height */
-  height: 100%;
-
-  /* Center and scale the image nicely */
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
 }
 </style>
