@@ -10,7 +10,7 @@ function ShowDialog() {
 }
 
 function HideDialog() {
-    store.many.document = {};
+  store.many.document = {};
 }
 
 function Close() {
@@ -83,3 +83,4 @@ function Reset() {
 </template>
 
 <style lang="scss" scoped></style>
+../stores/store_odl

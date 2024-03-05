@@ -73,7 +73,6 @@ import IRegister from "../interfaces/register.interface";
 // import ILocation from "../interfaces/location.interface.ts";
 const errorDesc = ref();
 const router = useRouter();
-
 const register = reactive<IRegister>({
   name: "",
   email: "",
@@ -90,30 +89,28 @@ const register = reactive<IRegister>({
 // });
 const handleRegister = async () => {
   try {
-    if (register.email.includes("@")) {
-      const response = await axios.post("http://10.0.58.14:9090/register", {
-        name: register.name,
-        email: register.email,
-        location: register.location,
-        password: register.password,
-      });
-      console.log("Registered successful", response.data);
-      router.replace({ path: "/login" });
+    if (register.name != "") {
+      // HasName = true;
+      if (register.email.includes("@")) {
+        // HasEmail = true;
+        if (register.password == register.confirm_password) {
+          // MatchingPwds = true;
+          const response = await axios.post("http://10.0.22.5:9090/register", {
+            name: register.name,
+            email: register.email,
+            location: register.location,
+            password: register.password,
+          });
+          console.log("Registered successful", response.data);
+          router.replace({ path: "/login" });
+        } else {
+          errorDesc.value = "Nem egyeznek a jelszavai!";
+        }
+      } else {
+        errorDesc.value = "Nem megfelelő email cím!";
+      }
     } else {
-      errorDesc.value = "Nem megfelelő email cím!";
-    }
-
-    if (register.password == register.confirm_password) {
-      const response = await axios.post("http://10.0.58.14:9090/register", {
-        name: register.name,
-        email: register.email,
-        location: register.location,
-        password: register.password,
-      });
-      console.log("Registered successful", response.data);
-      router.replace({ path: "/login" });
-    } else {
-      errorDesc.value = "Nem egyeznek a jelszavai!";
+      errorDesc.value = "Adjon meg egy felhasználónevet!";
     }
   } catch (error) {
     console.error("Registration failed", error.response.data);

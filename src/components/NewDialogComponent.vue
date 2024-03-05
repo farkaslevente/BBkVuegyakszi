@@ -72,3 +72,4 @@ function Submit() {
 </template>
 
 <style lang="scss" scoped></style>
+../stores/store_odl

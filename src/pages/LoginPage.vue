@@ -28,10 +28,10 @@
         <q-card-section>
           <q-form class="q-gutter-md">
             <q-input v-model="login.email" label="E-mail cím"> </q-input>
-            <q-input v-model="login.password" label="Jelszó" type="password"> </q-input>          
+            <q-input v-model="login.password" label="Jelszó" type="password"> </q-input>
             <div>
               <q-btn class="full-width" color="primary" label="Bejelentkezés" rounded @click="handleLogin()"></q-btn>
-              <div class="text-red flex justify-center" style="margin-top: 10px;">
+              <div class="text-red flex justify-center" style="margin-top: 10px">
                 {{ errorDesc }}
               </div>
               <div class="text-center q-mt-sm q-gutter-lg column">
@@ -46,48 +46,45 @@
   </div>
 </template>
 <script setup lang="ts">
-// onMounted(() => {
-//   function checkColorScheme() {
-//     if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
-//       // Dark mode
-//       console.log("Dark mode");
-//     } else {
-//       // Light mode
-//       console.log("Light mode");
-//     }
-//   }
-// });
 import axios from "axios";
 import { reactive, ref } from "vue";
 import { useRouter } from "vue-router";
 import ILogin from "../interfaces/login.interface";
+import { VisibilityState } from "src/stores/store";
 //const IPHome: "192.168.0.165";
-const errorDesc = ref();
+//const IP202loc: 10.0.22.5
 //let IPB8: "10.0.58.14";
+
+const errorDesc = ref();
 
 const router = useRouter();
 
-const login = reactive<ILogin>({
+ const login = reactive<ILogin>({
   email: "",
   password: "",
   successful: false,
 });
 const handleLogin = async () => {
   try {
-    const response = await axios.post("http://10.0.58.14:9090/login", {
-      email: login.email,
-      password: login.password,
-    });
-
-    console.log("Login successful", response.data);
-    login.successful = true;
-    router.replace({ path: "/profile" });
+    if (login.email.includes("@")) {
+      const response = await axios.post("http://10.0.22.5:9090/login", {
+        email: login.email,
+        password: login.password,
+      });
+      errorDesc.value = "";
+      console.log("Login successful", response.data);
+      VisibilityState.visibleOnMain = true;
+      router.replace({ path: "/profile" });
+    } else {
+      errorDesc.value = "Nem megfelelő email cím vagy jelszó!";
+    }
   } catch (error) {
     console.error("Login failed", error.response.data);
-    errorDesc.value = error.response.data.error;
+    errorDesc.value = "Nem megfelelő email cím vagy jelszó!";
   }
 };
 </script>
+
 <style lang="scss" scoped>
 .backgroundImage {
   position: fixed;

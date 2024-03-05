@@ -8,7 +8,6 @@ const store = useStore();
 
 const yn = store.app.yesNoComp;
 
-
 let nemReaktívVáltozó: number = 123;
 let reaktív1 = ref(123); // típusjelölés nélküli reaktív változó
 let reaktív2: Ref<number> = ref(123); // típusjelöléssel
@@ -191,7 +190,12 @@ function yesOrNoHandler(res: boolean): void {
 
       <div class="col-xs-12 col-md-6 q-pa-sm">
         <q-banner class="bg-secondary">
-          <YesOrNoComponent igen-felirat="Na-ná!" kérdés="Jedlikes vagy?" nemFelirat="Sajnos nem :-(" @btnPressed="yesOrNoHandler" />
+          <YesOrNoComponent
+            igen-felirat="Na-ná!"
+            kérdés="Jedlikes vagy?"
+            nemFelirat="Sajnos nem :-("
+            @btnPressed="yesOrNoHandler"
+          />
           Választott: {{ r.yesOrNoResult }}
         </q-banner>
       </div>
@@ -207,3 +211,4 @@ function yesOrNoHandler(res: boolean): void {
 </template>
 
 <style lang="scss" scoped></style>
+../stores/store_odl
