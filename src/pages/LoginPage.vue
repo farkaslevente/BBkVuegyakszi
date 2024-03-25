@@ -36,7 +36,7 @@
               </div>
               <div class="text-center q-mt-sm q-gutter-lg column">
                 <router-link class="text-blue" to="/register">Nincs még fiókja? Regisztráljon!</router-link>
-                <router-link class="text-blue" to="/">Elfelejtette jelszavát?</router-link>
+                <router-link class="text-blue" to="/forgottenPwd">Elfelejtette jelszavát?</router-link>
               </div>
             </div>
           </q-form>
@@ -51,6 +51,7 @@ import { reactive, ref } from "vue";
 import { useRouter } from "vue-router";
 import ILogin from "../interfaces/login.interface";
 import { VisibilityState } from "src/stores/store";
+const VisibilityStore = VisibilityState()
 //const IPHome: "192.168.0.165";
 //const IP202loc: 10.0.22.5
 //let IPB8: "10.0.58.14";
@@ -67,13 +68,13 @@ const router = useRouter();
 const handleLogin = async () => {
   try {
     if (login.email.includes("@")) {
-      const response = await axios.post("http://10.0.22.5:9090/login", {
+      const response = await axios.post(`${VisibilityStore.url}/login`, {
         email: login.email,
         password: login.password,
       });
       errorDesc.value = "";
       console.log("Login successful", response.data);
-      VisibilityState.visibleOnMain = true;
+      VisibilityStore.visibleOnMain = true;
       router.replace({ path: "/profile" });
     } else {
       errorDesc.value = "Nem megfelelő email cím vagy jelszó!";

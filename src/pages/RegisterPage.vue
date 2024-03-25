@@ -43,8 +43,7 @@
                 {{ errorDesc }}
               </div>
               <div class="text-center q-mt-sm q-gutter-lg column">
-                <router-link class="text-blue" to="/login">Már rendelkezik fiókkal?</router-link>
-                <router-link class="text-blue" to="/">Elfelejtette jelszavát?</router-link>
+                <router-link class="text-blue" to="/login">Már rendelkezik fiókkal?</router-link>                
               </div>
             </div>
           </q-form>
@@ -54,23 +53,13 @@
   </div>
 </template>
 <script setup lang="ts">
-// onMounted(() => {
-//   function checkColorScheme() {
-//     if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
-//       // Dark mode
-//       console.log("Dark mode");
-//     } else {
-//       // Light mode
-//       console.log("Light mode");
-//     }
-//   }
-// });
+
 import axios from "axios";
 import { reactive, ref } from "vue";
 import { useRouter } from "vue-router";
 import IRegister from "../interfaces/register.interface";
-// import { ref } from "vue";
-// import ILocation from "../interfaces/location.interface.ts";
+import { VisibilityState } from "../stores/store"
+const VisibilityStore = VisibilityState()
 const errorDesc = ref();
 const router = useRouter();
 const register = reactive<IRegister>({
@@ -82,11 +71,6 @@ const register = reactive<IRegister>({
   county: "",
 });
 
-// const locationTest = reactive<ILocation>({
-//   id,
-//   name: "",
-//   county: "",
-// });
 const handleRegister = async () => {
   try {
     if (register.name != "") {
@@ -95,7 +79,8 @@ const handleRegister = async () => {
         // HasEmail = true;
         if (register.password == register.confirm_password) {
           // MatchingPwds = true;
-          const response = await axios.post("http://10.0.22.5:9090/register", {
+          console.log(register.name, register.email, register.location, register.password)
+          const response = await axios.post(`${VisibilityStore.url}/register`, {
             name: register.name,
             email: register.email,
             location: register.location,
@@ -113,23 +98,9 @@ const handleRegister = async () => {
       errorDesc.value = "Adjon meg egy felhasználónevet!";
     }
   } catch (error) {
-    console.error("Registration failed", error.response.data);
-
-    // router.replace({ path: "/login" });
+    console.error("Registration failed", error.response.data);  
   }
 };
-// const handleGetTest = async () => {
-//   try {
-//     const response = await axios.get("http://192.168.0.165:9090/locations", {
-//       name: locationTest.name,
-//       county: locationTest.county,
-//     });
-
-//     console.log(response.data);
-//   } catch (error) {
-//     console.error("Registration failed", error.response.data);
-//   }
-// };
 </script>
 <style lang="scss" scoped>
 .backgroundImage {
